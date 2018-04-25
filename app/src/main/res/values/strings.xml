@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Store Inventory</string>
+    <string name="action_insert_dummy_data">Insert dummy data</string>
+    <string name="action_display_data">Refresh data</string>
+</resources>
