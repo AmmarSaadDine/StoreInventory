@@ -66,7 +66,7 @@ public class InventoryActivity extends AppCompatActivity {
 
         try {
             // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // pets table in the database).
+            // products table in the database).
             displayView.setText("Number of rows in inventory database table: " + cursor.getCount() + "\n\n");
             displayView.append(ProductEntry._ID + " - "
                     + ProductEntry.COLUMN_PRODUCT_NAME + " - "
