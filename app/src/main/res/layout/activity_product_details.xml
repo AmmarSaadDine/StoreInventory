@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Product Name -->
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/PDPNameText"
+            tools:text="God of War" />
+
+        <!-- Price Views -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pdp_entry_inner_margin">
+            <TextView
+                style="@style/PDPEntryTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_title"/>
+            <TextView
+                android:id="@+id/product_price"
+                style="@style/PDPEntryValueText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pdp_entry_inner_margin"
+                tools:text="10$"/>
+        </LinearLayout>
+
+        <!-- Quantity Views -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/pdp_entry_inner_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/PDPEntryTitleText"
+                android:text="@string/quantity_title"/>
+            <Button
+                android:id="@+id/minus_button"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                style="@style/GlobalButton"
+                android:layout_marginLeft="@dimen/pdp_entry_inner_margin"
+                android:text="-"/>
+
+            <TextView
+                android:id="@+id/quantity"
+                style="@style/PDPEntryValueText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pdp_entry_inner_margin"
+                tools:text="3"/>
+
+            <Button
+                android:id="@+id/plus_button"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                style="@style/GlobalButton"
+                android:layout_marginLeft="@dimen/pdp_entry_inner_margin"
+                android:text="+"/>
+        </LinearLayout>
+
+        <!-- Supplier Name Views -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pdp_entry_inner_margin">
+            <TextView
+                style="@style/PDPEntryTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/supplier_title"/>
+            <TextView
+                android:id="@+id/supplier_name"
+                style="@style/PDPEntryValueText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pdp_entry_inner_margin"
+                tools:text="Sony Entertainment"/>
+        </LinearLayout>
+
+        <!-- Supplier Phone Number Views -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pdp_entry_inner_margin">
+            <TextView
+                style="@style/PDPEntryTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/supplier_phone_title"/>
+            <TextView
+                android:id="@+id/supplier_phone"
+                style="@style/PDPEntryValueText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/pdp_entry_inner_margin"
+                tools:text="+xx-xxxx-xxxx"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/supplier_call_button"
+            android:layout_marginTop="@dimen/pdp_entry_inner_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/GlobalButton"
+            android:text="@string/supplier_call_button"/>
+
+    </LinearLayout>
+
+</ScrollView>

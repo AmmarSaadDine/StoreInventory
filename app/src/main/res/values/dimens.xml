@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="activity_margin">16dp</dimen>
+    <dimen name="button_padding">8dp</dimen>
+    <dimen name="button_corner_radius">5dp</dimen>
+    <!-- Inventory Activity -->
+    <dimen name="list_item_line_padding">8dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Product Details Activity -->
+    <dimen name="pdp_entry_inner_margin">16dp</dimen>
+
+    <!-- Editor Activity -->
+    <dimen name="editor_category_padding_top">16dp</dimen>
+    <dimen name="editor_category_inner_horizontal_padding">4dp</dimen>
+    <dimen name="editor_unit_padding_top">16dp</dimen>
+    <dimen name="editor_unit_padding_right">16dp</dimen>
 </resources>
