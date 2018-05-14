@@ -8,6 +8,17 @@
     <string name="delete_product_successful">Product deleted</string>
     <string name="delete_product_failed">Error deleting product</string>
 
+    <!-- Errors -->
+    <string name="error_invalid_product_name">Product requires a name</string>
+    <string name="error_invalid_product_price">Product requires a valid price</string>
+    <string name="error_invalid_product_quantity">Product requires valid quantity</string>
+    <string name="error_invalid_supplier_name">Product requires a supplier name</string>
+    <string name="error_invalid_supplier_phone">Product requires a supplier phone number</string>
+    <string name="error_invalid_update_uri">Update is not supported for %s</string>
+    <string name="error_invalid_delete_uri">Deletion is not supported for  %s</string>
+    <string name="error_invalid_query_uri">Query is not supported for %s</string>
+    <string name="error_invalid_insert_uri">Insertion is not supported for %s</string>
+
     <!-- Inventory Activity -->
     <string name="empty_view_text">No products available</string>
     <string name="empty_view_subtitle_text">Get started by tapping the plus button.</string>

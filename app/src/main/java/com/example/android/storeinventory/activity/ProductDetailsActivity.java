@@ -142,19 +142,23 @@ public class ProductDetailsActivity extends AppCompatActivity implements LoaderM
     private void deleteProduct() {
         // Only perform the delete if this is an existing product.
         if (currentProductUri != null) {
-            int rowsDeleted = getContentResolver().delete(currentProductUri, null, null);
-            // Show a toast message depending on whether or not the delete was successful.
-            if (rowsDeleted == 0) {
-                // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.delete_product_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.delete_product_successful),
-                        Toast.LENGTH_SHORT).show();
+            try {
+                int rowsDeleted = getContentResolver().delete(currentProductUri, null, null);
+                // Show a toast message depending on whether or not the delete was successful.
+                if (rowsDeleted == 0) {
+                    // If no rows were deleted, then there was an error with the delete.
+                    Toast.makeText(this, getString(R.string.delete_product_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the delete was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.delete_product_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
+                // Close the activity
+                finish();
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-            // Close the activity
-            finish();
         }
     }
 
@@ -168,11 +172,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements LoaderM
             ContentValues values = new ContentValues();
             values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, currentProduct.getQuantity());
             // Update the product
-            int rows = getContentResolver().update(productUri, values, null, null);
+            try {
+                int rows = getContentResolver().update(productUri, values, null, null);
 
-            if (rows == 0) {
-                Toast.makeText(this, getString(R.string.update_quantity_failed),
-                        Toast.LENGTH_SHORT).show();
+                if (rows == 0) {
+                    Toast.makeText(this, getString(R.string.update_quantity_failed),
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }

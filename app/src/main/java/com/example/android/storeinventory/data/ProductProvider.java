@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.android.storeinventory.R;
 import com.example.android.storeinventory.data.ProductContract.ProductEntry;
 
 /**
@@ -81,7 +82,7 @@ public class ProductProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_query_uri, uri));
         }
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -98,7 +99,7 @@ public class ProductProvider extends ContentProvider {
             case PRODUCTS:
                 return insertProduct(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_insert_uri, uri));
         }
     }
 
@@ -110,27 +111,27 @@ public class ProductProvider extends ContentProvider {
 
         String name = values.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
         if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("Product requires a name");
+            throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_product_name));
         }
 
         Double price = values.getAsDouble(ProductEntry.COLUMN_PRODUCT_PRICE);
         if (price == null || price < 0) {
-            throw new IllegalArgumentException("Product requires a valid price");
+            throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_product_price));
         }
 
         Integer quantity = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
         if (quantity == null || quantity < 0) {
-            throw new IllegalArgumentException("Product requires valid quantity");
+            throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_product_quantity));
         }
 
         String supplierName = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
         if (TextUtils.isEmpty(supplierName)) {
-            throw new IllegalArgumentException("Product requires a supplier name");
+            throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_supplier_name));
         }
 
         String supplierPhoneNumber = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
         if (TextUtils.isEmpty(supplierPhoneNumber)) {
-            throw new IllegalArgumentException("Product requires a supplier phone number");
+            throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_supplier_phone));
         }
         // Get writeable database
         SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -164,7 +165,7 @@ public class ProductProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateProduct(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_update_uri, uri));
         }
     }
 
@@ -178,28 +179,28 @@ public class ProductProvider extends ContentProvider {
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_NAME)) {
             String name = values.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
             if (TextUtils.isEmpty(name)) {
-                throw new IllegalArgumentException("Product requires a valid name");
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_product_name));
             }
         }
 
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_PRICE)) {
             Double price = values.getAsDouble(ProductEntry.COLUMN_PRODUCT_PRICE);
             if (price == null || price < 0) {
-                throw new IllegalArgumentException("Product requires a valid price");
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_product_price));
             }
         }
 
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_QUANTITY)) {
             Integer quantity = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity == null || quantity < 0) {
-                throw new IllegalArgumentException("Product requires a valid quantity");
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_product_quantity));
             }
         }
 
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME)) {
             String supplierName = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
             if (TextUtils.isEmpty(supplierName)) {
-                throw new IllegalArgumentException("Product requires a valid supplier name");
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_supplier_name));
             }
         }
 
@@ -207,7 +208,7 @@ public class ProductProvider extends ContentProvider {
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER)) {
             String supplierPhoneNumber = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
             if (TextUtils.isEmpty(supplierPhoneNumber)) {
-                throw new IllegalArgumentException("Product requires a valid supplier phone number");
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_supplier_phone));
             }
         }
 
@@ -249,7 +250,7 @@ public class ProductProvider extends ContentProvider {
                 rowsDeleted = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.error_invalid_delete_uri, uri));
         }
         // If 1 or more rows were deleted, then notify all listeners that the data at the
         // given URI has changed

@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -102,7 +103,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         switch (item.getItemId()) {
             case R.id.action_save:
                 saveProduct();
-                finish();
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
@@ -202,19 +202,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private void deleteProduct() {
         // Only perform the delete if this is an existing product.
         if (currentProductUri != null) {
-            int rowsDeleted = getContentResolver().delete(currentProductUri, null, null);
-            // Show a toast message depending on whether or not the delete was successful.
-            if (rowsDeleted == 0) {
-                // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_product_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_delete_product_successful),
-                        Toast.LENGTH_SHORT).show();
+            try {
+                int rowsDeleted = getContentResolver().delete(currentProductUri, null, null);
+                // Show a toast message depending on whether or not the delete was successful.
+                if (rowsDeleted == 0) {
+                    // If no rows were deleted, then there was an error with the delete.
+                    Toast.makeText(this, getString(R.string.editor_delete_product_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the delete was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_delete_product_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
+                // Close the activity
+                finish();
+            } catch (IllegalArgumentException e) {
+                   Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-            // Close the activity
-            finish();
         }
     }
 
@@ -237,54 +241,58 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             return;
         }
 
-        int quantity = 1;
-        if (!TextUtils.isEmpty(quantityString)) {
-            quantity = Integer.parseInt(quantityString);
-        }
-
-        double price = 0;
-        if (!TextUtils.isEmpty(priceString)) {
-            price = Double.parseDouble(priceString);
-        }
-
         // Create a ContentValues object where column names are the keys,
         // and product attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierNameString);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, supplierPhoneString);
 
-        if (currentProductUri == null) {
-            // Insert a new row for product in the database, returning the ID of that new row.
-            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        if (!TextUtils.isEmpty(quantityString)) {
+            int quantity = Integer.parseInt(quantityString);
+            values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+        }
 
-            // Show a toast message depending on whether or not the insertion was successful
-            if (newUri == null) {
-                // If the row ID is -1, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_product_failed), Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast with the row ID.
-                Toast.makeText(this, getString(R.string.editor_insert_product_successful), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            // Otherwise this is an EXISTING product, so update the product with content URI: currentProductUri
-            // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because currentProductUri will already identify the correct row in the database that
-            // we want to modify.
-            int rowsAffected = getContentResolver().update(currentProductUri, values, null, null);
+        if (!TextUtils.isEmpty(priceString)) {
+            double price = Double.parseDouble(priceString);
+            values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
+        }
 
-            // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
-                // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_product_failed),
-                        Toast.LENGTH_SHORT).show();
+        try {
+            if (currentProductUri == null) {
+                // Insert a new row for product in the database, returning the ID of that new row.
+                Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+                // Show a toast message depending on whether or not the insertion was successful
+                if (newUri == null) {
+                    // If the row ID is -1, then there was an error with insertion.
+                    Toast.makeText(this, getString(R.string.editor_insert_product_failed), Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the insertion was successful and we can display a toast with the row ID.
+                    Toast.makeText(this, getString(R.string.editor_insert_product_successful), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             } else {
-                // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_product_successful),
-                        Toast.LENGTH_SHORT).show();
+                // Otherwise this is an EXISTING product, so update the product with content URI: currentProductUri
+                // and pass in the new ContentValues. Pass in null for the selection and selection args
+                // because currentProductUri will already identify the correct row in the database that
+                // we want to modify.
+                int rowsAffected = getContentResolver().update(currentProductUri, values, null, null);
+
+                // Show a toast message depending on whether or not the update was successful.
+                if (rowsAffected == 0) {
+                    // If no rows were affected, then there was an error with the update.
+                    Toast.makeText(this, getString(R.string.editor_update_product_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the update was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_update_product_successful),
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

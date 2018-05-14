@@ -1,6 +1,5 @@
 package com.example.android.storeinventory.activity;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -8,7 +7,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.storeinventory.R;
 import com.example.android.storeinventory.adapter.ProductCursorAdapter;
-import com.example.android.storeinventory.data.InventoryDbHelper;
 import com.example.android.storeinventory.data.ProductContract.ProductEntry;
 
 public class InventoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -70,7 +66,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
-    private void insertProduct() {
+    private void insertDummyProduct() {
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, "God of War");
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 60.0);
@@ -78,7 +74,11 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, "Sony Interactive Entertainment");
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, "xx-xxx-xxxxx");
 
-        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        try {
+            getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -93,7 +93,7 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
-                insertProduct();
+                insertDummyProduct();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
@@ -136,8 +136,11 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
      * Helper method to delete all products in the database.
      */
     private void deleteAllProducts() {
-        int rowsDeleted = getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from products database");
+        try {
+            getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void buyProduct(long productID, int currentQuantity) {
@@ -148,7 +151,11 @@ public class InventoryActivity extends AppCompatActivity implements LoaderManage
             ContentValues values = new ContentValues();
             values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, currentQuantity - 1);
             // Update the product
-            getContentResolver().update(productUri, values, null, null);
+            try {
+                getContentResolver().update(productUri, values, null, null);
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, getString(R.string.product_sold),
                     Toast.LENGTH_SHORT).show();
